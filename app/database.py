@@ -1,9 +1,16 @@
+import os
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.orm import sessionmaker, declarative_base
 
-DATABASE_URL = "postgresql://postgres:0414@localhost/lab_management"
+load_dotenv()
 
-engine = create_engine(DATABASE_URL)
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+engine = create_engine(
+    DATABASE_URL,
+    pool_pre_ping=True
+)
 
 SessionLocal = sessionmaker(
     autocommit=False,
@@ -12,7 +19,6 @@ SessionLocal = sessionmaker(
 )
 
 Base = declarative_base()
-
 
 def get_db():
     db = SessionLocal()
